@@ -1,20 +1,16 @@
-   
 pipeline{
     agent any
     environment{
         scannerHome = tool name: 'sonar_scanner_dotnet', type: 'hudson.plugins.sonar.MsBuildSQRunnerInstallation'
     }
     stages{
-        stage('Checkout') {
-            steps {
-             checkout scm
-            }
-        }
+        
         stage('nuget restore') {
             steps {
              bat "dotnet restore WebApplication4\\WebApplication4.csproj"
             }
         }
+        
         stage('Start sonarqube analysis'){
            steps{
                withSonarQubeEnv('SonarQubeScanner'){
@@ -34,6 +30,7 @@ pipeline{
                }
             }
         }
+        
         stage('Docker image'){
              steps{
                bat "docker build -t i-rahulvalecha-master WebApplication4"
@@ -48,8 +45,7 @@ pipeline{
                 }
                 stage('PushToDTR'){
                      steps{
-                        bat "docker tag i-rahulvalecha-master dtr.nagarro.com:443/i-rahulvalecha-master"
-                        bat "docker push dtr.nagarro.com:443/i-rahulvalecha-master"
+                      bat "docker build -t i-rahulvalecha-master WebApplication4"
                      }
                 }
             }
@@ -59,9 +55,14 @@ pipeline{
                bat "docker run -d -p 6002:80 --name c_rahulvalecha_master i-rahulvalecha-master"
              }
         }
+        stage('Helm Chart Deployment'){
+            steps{
+               bat "helm install master-branch master-chart --set appname=master-app --set  nodePort=30157 --set image=dtr.nagarro.com:443/i-rahulvalecha-master"
+             }
+        }
 
+ 
 
         
     }
 }
-
