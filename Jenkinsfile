@@ -16,7 +16,7 @@ pipeline{
         }
         stage('Start sonarqube analysis'){
            steps{
-               withSonarQubeEnv('sonar_scanner_dotnet'){
+               withSonarQubeEnv('SonarQubeScanner'){
                    bat "dotnet ${scannerHome}/SonarScanner.MSBuild.dll begin /k:$JOB_NAME"
                }
             }
@@ -28,7 +28,7 @@ pipeline{
         }
         stage('Stop sonarqube analysis'){
            steps{
-               withSonarQubeEnv('sonar_scanner_dotnet'){
+               withSonarQubeEnv('SonarQubeScanner'){
                     bat "dotnet ${scannerHome}/SonarScanner.MSBuild.dll end"
                }
             }
