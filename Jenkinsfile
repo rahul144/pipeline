@@ -3,7 +3,7 @@ pipeline{
     stages{
         stage('Checkout') {
             steps {
-             git changelog: false, credentialsId: 'rahulgit', poll: false, url: 'https://git.nagarro.com/NAGP/rahulvalecha'
+             checkout scm
             }
         }
         stage('nuget restore') {
