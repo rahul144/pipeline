@@ -1,5 +1,8 @@
 pipeline{
     agent any
+    environment{
+        scannerHome = tool name: 'sonar_scanner_dotnet', type: 'hudson.plugins.sonar.MsBuildSQRunnerInstallation'
+    }
     stages{
         stage('Checkout') {
             steps {
@@ -11,9 +14,23 @@ pipeline{
              bat "dotnet restore WebApplication4\\WebApplication4.csproj"
             }
         }
+        stage('Start sonarqube analysis'){
+           steps{
+               withSonarQubeEnv('sonar_scanner_dotnet'){
+                   bat "dotnet ${scannerHome}/SonarScanner.MSBuild.dll begin /k:$JOB_NAME"
+               }
+            }
+        }
         stage('Code build'){
            steps{
               bat "dotnet build WebApplication4\\WebApplication4.csproj --configuration Release"
+            }
+        }
+        stage('Stop sonarqube analysis'){
+           steps{
+               withSonarQubeEnv('sonar_scanner_dotnet'){
+                    bat "dotnet ${scannerHome}/SonarScanner.MSBuild.dll end"
+               }
             }
         }
         stage('Docker image'){
