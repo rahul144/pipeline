@@ -23,7 +23,7 @@ pipeline{
         }
         stage('Code build'){
            steps{
-              bat "dotnet build WebApplication4\\WebApplication4.csproj --configuration Release"
+              bat "dotnet build WebApplication4.sln --configuration Release"
             }
         }
         stage('Stop sonarqube analysis'){
