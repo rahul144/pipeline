@@ -1,3 +1,5 @@
+[6:45 PM] Rahul Valecha
+    
 pipeline{
     agent any
     environment{
@@ -42,7 +44,7 @@ pipeline{
             parallel {
                 stage('PreContainerCheck'){
                      steps{
-                        bat "docker build -t i-rahulvalecha-master WebApplication4"
+                       bat 'docker ps -aq --filter "name=c_rahulvalecha_master" | findstr "." && docker stop c_rahulvalecha_master && docker rm -fv c_rahulvalecha_master'
                      }
                 }
                 stage('PushToDTR'){
@@ -59,6 +61,8 @@ pipeline{
              }
         }
 
+
         
     }
 }
+
