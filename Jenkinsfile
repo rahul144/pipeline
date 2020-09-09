@@ -43,11 +43,7 @@ pipeline{
                        bat 'docker ps -aq --filter "name=c_rahulvalecha_master" | findstr "." && docker stop c_rahulvalecha_master && docker rm -fv c_rahulvalecha_master'
                      }
                 }
-                stage('PushToDTR'){
-                     steps{
-                      bat "docker build -t i-rahulvalecha-master WebApplication4"
-                     }
-                }
+                
             }
         }
         stage('Docker Deployment'){
