@@ -1,5 +1,4 @@
-[6:45 PM] Rahul Valecha
-    
+   
 pipeline{
     agent any
     environment{
